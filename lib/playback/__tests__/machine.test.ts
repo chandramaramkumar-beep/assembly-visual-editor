@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createActor } from "xstate";
-import { DEFAULT_STEP_DURATION, playbackMachine } from "../machine";
+import { DEFAULT_STEP_DURATION, JUMP_HOLD_MS, playbackMachine } from "../machine";
 
 function start(totalSteps: number) {
   const actor = createActor(playbackMachine, { input: { totalSteps } });
@@ -84,9 +84,15 @@ describe("playback machine", () => {
     expect(actor.getSnapshot().value).toBe("jumped");
     expect(actor.getSnapshot().context.stepIndex).toBe(6);
 
-    vi.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(JUMP_HOLD_MS + 50);
     expect(actor.getSnapshot().value).toBe("playing");
     expect(actor.getSnapshot().context.stepIndex).toBe(6);
+  });
+
+  it("scales step duration by the chosen playback speed", () => {
+    const actor = start(5);
+    actor.send({ type: "SET_SPEED", speed: 0.5 });
+    expect(actor.getSnapshot().context.speed).toBe(0.5);
   });
 
   it("the full-playback override toggles", () => {

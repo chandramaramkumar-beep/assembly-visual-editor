@@ -25,7 +25,7 @@ export function JumpThumbnail() {
     const tween = gsap.fromTo(
       cardRef.current,
       { scale: 1.5, y: -120, opacity: 0.4 },
-      { scale: 1, y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+      { scale: 1, y: 0, opacity: 1, duration: 1.1, ease: "power3.out" },
     );
     return () => {
       tween.kill();

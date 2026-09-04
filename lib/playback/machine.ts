@@ -8,6 +8,8 @@ export interface PlaybackContext {
   stepDuration: number;
   /** Student override that forces every loop iteration to play in full. */
   forceFullPlayback: boolean;
+  /** Playback rate: 0.5 is half speed, 2 is double. Lower means longer per step. */
+  speed: number;
   /** The most recent seek, kept as a persistent thumbnail. Only ever one. */
   jump: { stepIndex: number } | null;
 }
@@ -22,9 +24,15 @@ export type PlaybackEvent =
   | { type: "DISMISS_THUMBNAIL" }
   | { type: "TRACE_CHANGED"; totalSteps: number }
   | { type: "SET_DURATION"; duration: number }
+  | { type: "SET_SPEED"; speed: number }
   | { type: "TOGGLE_FULL_PLAYBACK" };
 
-export const DEFAULT_STEP_DURATION = 700;
+export const DEFAULT_STEP_DURATION = 1600;
+
+export const SPEED_OPTIONS = [0.5, 1, 2] as const;
+
+/** How long a landed seek stays on screen before collapsing into the thumbnail. */
+export const JUMP_HOLD_MS = 1400;
 
 export const playbackMachine = setup({
   types: {
@@ -46,6 +54,7 @@ export const playbackMachine = setup({
     totalSteps: input.totalSteps,
     stepDuration: DEFAULT_STEP_DURATION,
     forceFullPlayback: false,
+    speed: 1,
     jump: null,
   }),
 
@@ -57,6 +66,9 @@ export const playbackMachine = setup({
     },
     SET_DURATION: {
       actions: assign(({ event }) => ({ stepDuration: event.duration })),
+    },
+    SET_SPEED: {
+      actions: assign(({ event }) => ({ speed: event.speed })),
     },
     TOGGLE_FULL_PLAYBACK: {
       actions: assign(({ context }) => ({ forceFullPlayback: !context.forceFullPlayback })),
@@ -118,7 +130,7 @@ export const playbackMachine = setup({
      */
     jumped: {
       after: {
-        900: "thumbnailParked",
+        [JUMP_HOLD_MS]: "thumbnailParked",
       },
       on: {
         PLAY: "playing",

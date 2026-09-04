@@ -72,7 +72,7 @@ export function StackView() {
                 initial={{ opacity: 0, y: -8, scale: 0.97 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                transition={{ type: "spring", stiffness: 140, damping: 22, mass: 1.1 }}
                 className={styles.frame}
                 data-testid={`frame-${group.label}`}
               >
@@ -88,7 +88,7 @@ export function StackView() {
                           initial={{ opacity: 0, height: 0, y: -10 }}
                           animate={{ opacity: 1, height: "auto", y: 0 }}
                           exit={{ opacity: 0, height: 0, y: -6 }}
-                          transition={{ type: "spring", stiffness: 480, damping: 36 }}
+                          transition={{ type: "spring", stiffness: 170, damping: 24, mass: 1 }}
                         >
                           <button
                             type="button"

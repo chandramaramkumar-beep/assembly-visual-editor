@@ -1,12 +1,13 @@
 "use client";
 
 import { usePlayback } from "@/lib/playback/PlaybackProvider";
+import { SPEED_OPTIONS } from "@/lib/playback/machine";
 import { useStore } from "@/lib/store";
 import styles from "./Controls.module.css";
 
 export function Controls() {
   const canPlay = useStore((s) => s.canPlay);
-  const { stepIndex, totalSteps, isPlaying, isFinished, forceFullPlayback, presentation, send } =
+  const { stepIndex, totalSteps, isPlaying, isFinished, forceFullPlayback, speed, presentation, send } =
     usePlayback();
   const iteration = presentation?.iteration ?? null;
 
@@ -49,6 +50,21 @@ export function Controls() {
       >
         Reset
       </button>
+
+      <div className={styles.speed} role="group" aria-label="Playback speed">
+        {SPEED_OPTIONS.map((option) => (
+          <button
+            key={option}
+            type="button"
+            className={`${styles.speedButton} ${speed === option ? styles.speedActive : ""}`}
+            onClick={() => send({ type: "SET_SPEED", speed: option })}
+            aria-pressed={speed === option}
+            data-testid={`speed-${option}`}
+          >
+            {option}&times;
+          </button>
+        ))}
+      </div>
 
       <label className={styles.toggle} title="Play every loop iteration instead of compressing">
         <input

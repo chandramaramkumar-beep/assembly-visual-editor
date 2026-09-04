@@ -30,7 +30,7 @@ export function RegisterPanel() {
     const tween = gsap.fromTo(
       targets,
       { backgroundColor: "var(--highlight)" },
-      { backgroundColor: "rgba(0,0,0,0)", duration: 0.9, ease: "power2.out" },
+      { backgroundColor: "rgba(0,0,0,0)", duration: 1.6, ease: "power2.out" },
     );
     return () => {
       tween.kill();

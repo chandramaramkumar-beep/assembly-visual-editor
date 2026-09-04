@@ -16,6 +16,8 @@ interface PlaybackApi {
   /** True once playback has started, which is when clicking a line seeks. */
   isSeekable: boolean;
   forceFullPlayback: boolean;
+  /** Playback rate multiplier; lower is slower. */
+  speed: number;
   jump: { stepIndex: number } | null;
   /** How the step currently on screen should be presented (loop compression). */
   presentation: StepPresentation | null;
@@ -29,7 +31,7 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
   const totalSteps = trace.steps.length;
   const [state, send] = useMachine(playbackMachine, { input: { totalSteps } });
 
-  const { stepIndex, forceFullPlayback } = state.context;
+  const { stepIndex, forceFullPlayback, speed } = state.context;
 
   const plan = useMemo(
     () => planPresentation(trace, findLoops(trace), forceFullPlayback),
@@ -42,13 +44,14 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
     send({ type: "TRACE_CHANGED", totalSteps });
   }, [totalSteps, send]);
 
-  // Compressed loop iterations advance faster than fully-played ones.
+  // Compressed loop iterations advance faster than fully-played ones, scaled by
+  // the student's chosen playback rate.
   useEffect(() => {
     send({
       type: "SET_DURATION",
-      duration: Math.round(DEFAULT_STEP_DURATION * (current?.speed ?? 1)),
+      duration: Math.round((DEFAULT_STEP_DURATION * (current?.speed ?? 1)) / speed),
     });
-  }, [current?.speed, send]);
+  }, [current?.speed, speed, send]);
 
   // Once a loop's pattern is established, summarise the remainder by reusing
   // the seek/jump thumbnail rather than animating every remaining iteration.
@@ -66,6 +69,7 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
       isFinished: state.matches("finished"),
       isSeekable: state.context.stepIndex >= 0,
       forceFullPlayback: state.context.forceFullPlayback,
+      speed: state.context.speed,
       jump: state.context.jump,
       presentation: current,
       send,

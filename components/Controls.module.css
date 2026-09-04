@@ -47,6 +47,38 @@
   font-size: 0.65rem;
 }
 
+.speed {
+  display: inline-flex;
+  gap: 1px;
+  padding: 1px;
+  background: var(--disabled-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+}
+
+.speedButton {
+  padding: 0.2rem 0.4rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.speedButton:hover {
+  color: var(--fg);
+}
+
+.speedActive {
+  background: var(--panel);
+  color: var(--accent);
+}
+
 .toggle {
   display: inline-flex;
   align-items: center;

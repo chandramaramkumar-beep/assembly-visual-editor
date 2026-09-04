@@ -131,7 +131,7 @@ export function planPresentation(
       for (let step = iteration.startStep; step <= iteration.endStep; step++) {
         if (step < 0 || step >= plan.length) continue;
         plan[step] = {
-          speed: compress ? 0.35 : 1,
+          speed: compress ? 0.6 : 1,
           pulse: compress,
           iteration: { current: iterationNumber, total },
           summariseTo: summarise && step === iteration.endStep ? lastStep : null,
