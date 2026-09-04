@@ -1,0 +1,39 @@
+{
+  "name": "assembly-visual-editor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "build:grammar": "node scripts/build-grammar.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.10.4",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/state": "^6.7.1",
+    "@codemirror/view": "^6.43.8",
+    "@lezer/highlight": "^1.2.3",
+    "codemirror": "^6.0.2",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@fast-check/vitest": "^0.4.1",
+    "@lezer/generator": "^1.8.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.0",
+    "fast-check": "^4.9.0",
+    "typescript": "^5",
+    "vitest": "^4.1.10"
+  }
+}

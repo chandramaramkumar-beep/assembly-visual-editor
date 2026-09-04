@@ -1,0 +1,84 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.heading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0;
+}
+
+.list,
+.flags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  transition: background-color 220ms ease;
+}
+
+.changed {
+  background: var(--highlight);
+}
+
+.name {
+  color: var(--accent);
+}
+
+.value {
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.flags {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+}
+
+.flag {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.flagSet {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.flagName {
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.flagValue {
+  font-weight: 600;
+}

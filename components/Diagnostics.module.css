@@ -1,0 +1,24 @@
+.diagnostics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 6px;
+}
+
+.entry {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--warn-fg);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.line {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--warn-accent);
+  white-space: nowrap;
+}

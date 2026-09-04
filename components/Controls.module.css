@@ -1,0 +1,55 @@
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.play,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  background: var(--disabled-bg);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: not-allowed;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
+.playEnabled {
+  background: var(--play-bg);
+  border-color: var(--play-border);
+  color: var(--play-fg);
+  cursor: pointer;
+}
+
+.playEnabled:hover {
+  background: var(--play-bg-hover);
+}
+
+.secondary:not(:disabled) {
+  cursor: pointer;
+  color: var(--fg);
+}
+
+.secondary:not(:disabled):hover {
+  background: var(--hover);
+}
+
+.icon {
+  font-size: 0.65rem;
+}
+
+.position {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-left: auto;
+}

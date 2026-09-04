@@ -1,0 +1,134 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.heading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0;
+}
+
+.depth {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.empty {
+  margin: 0;
+  padding: 1.5rem 0.5rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.empty code {
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+.frames {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.frame {
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.frameLabel {
+  padding: 0.3rem 0.6rem;
+  background: var(--frame-header);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.slots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.slot {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.slot:hover {
+  background: var(--hover);
+}
+
+.slotHighlighted {
+  background: var(--highlight);
+}
+
+.slotReturn .slotValue {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.slotValue {
+  font-variant-numeric: tabular-nums;
+}
+
+.rsp {
+  color: var(--accent);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.detail {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.75rem;
+  margin: 0;
+  padding: 0.5rem 0.6rem;
+  background: var(--detail-bg);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.detail dt {
+  color: var(--muted);
+}
+
+.detail dd {
+  margin: 0;
+  color: var(--fg);
+}
