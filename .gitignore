@@ -44,3 +44,6 @@ next-env.d.ts
 lib/editor/assembly.parser.js
 lib/editor/assembly.parser.d.ts
 lib/editor/assembly.terms.js
+
+# Claude Code personal settings
+.claude/settings.local.json
