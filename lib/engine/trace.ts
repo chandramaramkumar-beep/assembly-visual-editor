@@ -135,13 +135,24 @@ export function firstStepForInstruction(trace: Trace, instructionIndex: number):
   return trace.steps.find((s) => s.instructionIndex === instructionIndex) ?? null;
 }
 
-/** Last trace step at or before `fromStep` produced by the given instruction — used by backward seeks. */
-export function lastStepForInstruction(
+/**
+ * Trace position to seek to when the student clicks a line, given where playback
+ * currently sits. An instruction inside a loop executes many times, so a click is
+ * resolved to the nearest execution: the first one at or after the current
+ * position, otherwise the last one before it. Null if the line never executed.
+ */
+export function seekTargetForInstruction(
   trace: Trace,
   instructionIndex: number,
-): TraceStep | null {
-  for (let i = trace.steps.length - 1; i >= 0; i--) {
-    if (trace.steps[i].instructionIndex === instructionIndex) return trace.steps[i];
+  fromStep: number,
+): number | null {
+  let lastBefore: number | null = null;
+
+  for (const step of trace.steps) {
+    if (step.instructionIndex !== instructionIndex) continue;
+    if (step.index >= fromStep) return step.index;
+    lastBefore = step.index;
   }
-  return null;
+
+  return lastBefore;
 }

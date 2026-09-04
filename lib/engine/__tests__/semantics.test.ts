@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { INITIAL_RSP } from "../constants";
 import { parseProgram } from "../parser";
-import { generateTrace } from "../trace";
+import { generateTrace, seekTargetForInstruction } from "../trace";
 import { toSigned64 } from "../bigint-utils";
 import type { Trace } from "../trace";
 
@@ -323,5 +323,57 @@ describe("faults", () => {
     expect(trace.fault?.kind).toBe("stack-underflow");
     expect(trace.steps).toHaveLength(2);
     expect(trace.steps[1].state.registers.rbx).toBe(2n);
+  });
+});
+
+describe("seek targets", () => {
+  const source = [
+    "  mov rcx, 3",
+    "body:",
+    "  push rcx",
+    "  loop body",
+    "  nop",
+  ].join("\n");
+
+  it("resolves a line that ran once", () => {
+    const trace = run(source);
+    // instruction 0 is `mov rcx, 3`
+    expect(seekTargetForInstruction(trace, 0, -1)).toBe(0);
+  });
+
+  it("picks the next execution at or after the current position inside a loop", () => {
+    const trace = run(source);
+    const pushExecutions = trace.steps
+      .filter((s) => s.instruction.op === "push")
+      .map((s) => s.index);
+    expect(pushExecutions.length).toBeGreaterThan(1);
+
+    const pushInstruction = trace.steps[pushExecutions[0]].instructionIndex;
+    expect(seekTargetForInstruction(trace, pushInstruction, 0)).toBe(pushExecutions[0]);
+    expect(seekTargetForInstruction(trace, pushInstruction, pushExecutions[0] + 1)).toBe(
+      pushExecutions[1],
+    );
+  });
+
+  it("falls back to the last execution before the position when seeking backward", () => {
+    const trace = run(source);
+    const pushExecutions = trace.steps
+      .filter((s) => s.instruction.op === "push")
+      .map((s) => s.index);
+    const pushInstruction = trace.steps[pushExecutions[0]].instructionIndex;
+    const last = pushExecutions[pushExecutions.length - 1];
+
+    expect(seekTargetForInstruction(trace, pushInstruction, last + 5)).toBe(last);
+  });
+
+  it("returns null for an instruction that never executed", () => {
+    const trace = run(`
+      jmp skip
+      nop
+      skip:
+      nop
+    `);
+    // instruction 1 is the `nop` that is jumped over
+    expect(seekTargetForInstruction(trace, 1, -1)).toBeNull();
   });
 });

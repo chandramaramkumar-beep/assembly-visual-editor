@@ -1,16 +1,12 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 import { REGISTER_NAMES, toSigned64, type RegisterName } from "@/lib/engine";
-import { useRegisterState, useStore } from "@/lib/store";
+import { useCurrentDelta, useRegisterState } from "@/lib/playback/PlaybackProvider";
 import styles from "./RegisterPanel.module.css";
 
-/** Stable reference — a Zustand selector must never build a new object per render. */
 const NO_CHANGES: readonly RegisterName[] = [];
-
-function formatValue(value: bigint): string {
-  const signed = toSigned64(value);
-  return signed.toString();
-}
 
 function formatHex(value: bigint): string {
   return `0x${value.toString(16)}`;
@@ -18,11 +14,28 @@ function formatHex(value: bigint): string {
 
 export function RegisterPanel() {
   const state = useRegisterState();
-  const changed = useStore((s) =>
-    s.stepIndex >= 0
-      ? (s.trace.steps[s.stepIndex]?.delta.changedRegisters ?? NO_CHANGES)
-      : NO_CHANGES,
-  );
+  const delta = useCurrentDelta();
+  const changed = delta?.changedRegisters ?? NO_CHANGES;
+  const rowRefs = useRef(new Map<RegisterName, HTMLLIElement>());
+
+  // GSAP flashes only the rows that actually changed, so attention lands on the
+  // delta rather than the whole panel redrawing.
+  useEffect(() => {
+    if (changed.length === 0) return;
+    const targets = changed
+      .map((name) => rowRefs.current.get(name))
+      .filter((el): el is HTMLLIElement => Boolean(el));
+    if (targets.length === 0) return;
+
+    const tween = gsap.fromTo(
+      targets,
+      { backgroundColor: "var(--highlight)" },
+      { backgroundColor: "rgba(0,0,0,0)", duration: 0.9, ease: "power2.out" },
+    );
+    return () => {
+      tween.kill();
+    };
+  }, [changed]);
 
   return (
     <section className={styles.panel} aria-label="Registers">
@@ -34,12 +47,16 @@ export function RegisterPanel() {
           return (
             <li
               key={name}
-              className={`${styles.row} ${changed.includes(name) ? styles.changed : ""}`}
+              ref={(el) => {
+                if (el) rowRefs.current.set(name, el);
+                else rowRefs.current.delete(name);
+              }}
+              className={styles.row}
               data-testid={`register-${name}`}
             >
               <span className={styles.name}>{name}</span>
               <span className={styles.value} title={formatHex(value)}>
-                {isPointer ? formatHex(value) : formatValue(value)}
+                {isPointer ? formatHex(value) : toSigned64(value).toString()}
               </span>
             </li>
           );

@@ -25,10 +25,17 @@ Two strictly separated responsibilities — keep this boundary visible in the fo
 ```
 app/                    # Next.js App Router: routes, pages, API routes for AI agent calls
 lib/engine/             # deterministic core — see lib/engine/CLAUDE.md
-lib/engine/__tests__/   # Vitest + fast-check property tests for the core
+lib/analysis/           # pure derived readings of a trace (loop classification, playback plan)
+lib/editor/             # CodeMirror: Lezer grammar, syntax highlighting, active-line + seek decorations
+lib/playback/           # XState machine + provider owning playback position
+lib/store.ts            # Zustand: editor source and general UI state only
 lib/agents/             # AI orchestration — see lib/agents/CLAUDE.md
 components/             # UI: code editor panel, stack visualization, register panel, controls
 ```
+
+**One owner per concern.** Playback position (step index, playing/paused, the jump thumbnail) lives in the XState machine — never mirror it into Zustand. Zustand holds the editor source, the derived trace, and panel UI state. Loop compression is derived in `lib/analysis`, never stored.
+
+The Lezer grammar is compiled from `lib/editor/assembly.grammar` into gitignored generated files; `npm run dev/build/test/typecheck` regenerate them automatically via pre-scripts. Edit the `.grammar` file, never the generated output. Keywords and register names are carved out of `Identifier` with `@specialize` — declaring them as separate tokens makes a label like `loop_start` tokenize as the mnemonic `loop`.
 
 ## Tech stack
 

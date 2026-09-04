@@ -47,6 +47,50 @@
   font-size: 0.65rem;
 }
 
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle input {
+  accent-color: var(--accent);
+  margin: 0;
+}
+
+.iteration {
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: var(--highlight);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+
+.iterationPulse {
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iterationPulse {
+    animation: none;
+  }
+}
+
 .position {
   font-family: var(--font-mono);
   font-size: 0.7rem;

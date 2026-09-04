@@ -11,6 +11,7 @@
   --frame-header: #f4f4f1;
   --detail-bg: #f6f6f3;
   --executing-line: #fdf0e4;
+  --preceding-block: #f0f0ec;
 
   --play-bg: #e8f3ec;
   --play-bg-hover: #d9ebe0;
@@ -44,6 +45,7 @@
     --frame-header: #23232a;
     --detail-bg: #1f1f26;
     --executing-line: #33281d;
+    --preceding-block: #202028;
 
     --play-bg: #1e3328;
     --play-bg-hover: #264032;

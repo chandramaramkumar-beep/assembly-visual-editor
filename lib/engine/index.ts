@@ -8,7 +8,7 @@ export {
   generateTrace,
   stateAtStep,
   firstStepForInstruction,
-  lastStepForInstruction,
+  seekTargetForInstruction,
   type Trace,
   type TraceStep,
   type StepDelta,

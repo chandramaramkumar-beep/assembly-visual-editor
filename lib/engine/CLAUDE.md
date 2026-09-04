@@ -11,6 +11,12 @@ This is the one part of the system that must never be wrong. Everything else in 
 - **No example-only tests for new logic.** Use fast-check (`@fast-check/vitest`) to state the invariant (e.g. "stack pointer position always equals pushes minus pops so far, for any generated sequence") and let it generate cases. Example tests are fine as a first sanity check, not as the only coverage.
 - **Output includes trace metadata**, not just final state — which frame each snapshot belongs to, what changed since the previous snapshot — so `lib/agents/` and the UI never need to recompute anything, only read.
 
+## Layout
+
+`types.ts` (instruction union, state, faults) · `transitions.ts` (the exhaustive per-instruction switch) · `flags.ts` (ZF/SF/CF/OF rules) · `trace.ts` (snapshot sequence + per-step deltas) · `parser.ts` (source text to Program; never throws, reports errors per line) · `bigint-utils.ts` (64-bit wrapping).
+
+Register values are `bigint` wrapped to unsigned 64 bits; use `toSigned64` only for display. Faults (stack underflow, `ret` without `call`, divide-by-zero, step limit) are reported on the trace, never thrown to the UI — a faulted trace still holds every step completed before the fault.
+
 ## Scope reminder
 
 This is a fixed lookup table over a defined teaching instruction subset, not a general instruction executor. If a change here would let the engine run arbitrary/unbounded programs against real memory semantics, it belongs outside this project's scope — flag it rather than building it.
